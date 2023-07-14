@@ -42,24 +42,39 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/variants/eightanaloginputs</locationURI>
 		</link>
 		<link>
+			<name>libraries/Adafruit_Unified_Sensor</name>
+			<type>2</type>
+			<location>C:/Users/hgraves/Documents/Arduino/libraries/Adafruit_Unified_Sensor</location>
+		</link>
+		<link>
 			<name>libraries/DHT</name>
 			<type>2</type>
 			<location>C:/Users/hgrav/Documents/Arduino/libraries/DHT</location>
 		</link>
 		<link>
+			<name>libraries/DHT_sensor_library</name>
+			<type>2</type>
+			<location>C:/Users/hgraves/Documents/Arduino/libraries/DHT_sensor_library</location>
+		</link>
+		<link>
 			<name>libraries/DallasTemperature</name>
 			<type>2</type>
-			<location>C:/Users/hgrav/Documents/Arduino/libraries/DallasTemperature</location>
+			<location>C:/Users/hgraves/Documents/Arduino/libraries/DallasTemperature</location>
 		</link>
 		<link>
 			<name>libraries/OneWire</name>
 			<type>2</type>
-			<location>C:/Users/hgrav/Documents/Arduino/libraries/OneWire</location>
+			<location>C:/Users/hgraves/Documents/Arduino/libraries/OneWire</location>
 		</link>
 		<link>
 			<name>libraries/RF24</name>
 			<type>2</type>
-			<location>C:/Users/hgrav/Documents/Arduino/libraries/RF24</location>
+			<location>C:/Users/hgraves/Documents/Arduino/libraries/RF24</location>
+		</link>
+		<link>
+			<name>libraries/SPI</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/libraries/SPI</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

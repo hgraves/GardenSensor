@@ -1,6 +1,8 @@
 #include "Arduino.h"
 
 #include "DHT.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 #define DHTPIN 2     // what pin we're connected to
 
@@ -16,10 +18,6 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 
-
-#include <OneWire.h>
-#include <DallasTemperature.h>
-
 // Data wire is plugged into pin 3 on the Arduino
 #define ONE_WIRE_BUS 3
 
@@ -34,8 +32,8 @@ DallasTemperature sensors(&oneWire);
 // http://www.hacktronics.com/Tutorials/arduino-1-wire-address-finder.html
 
 DeviceAddress insideThermometer = { 0x28, 0x94, 0xE2, 0xDF, 0x02, 0x00, 0x00, 0xFE };
-DeviceAddress outsideThermometer = { 0x28, 0x6B, 0xDF, 0xDF, 0x02, 0x00, 0x00, 0xC0 };
-DeviceAddress dogHouseThermometer = { 0x28, 0x59, 0xBE, 0xDF, 0x02, 0x00, 0x00, 0x9F };
+// DeviceAddress outsideThermometer = { 0x28, 0x6B, 0xDF, 0xDF, 0x02, 0x00, 0x00, 0xC0 };
+// DeviceAddress dogHouseThermometer = { 0x28, 0x59, 0xBE, 0xDF, 0x02, 0x00, 0x00, 0x9F };
 
 
 //The setup function is called once at startup of the sketch
@@ -49,8 +47,7 @@ void setup()
 
 	  // set the resolution to 10 bit (good enough?)
 	  sensors.setResolution(insideThermometer, 10);
-	  sensors.setResolution(outsideThermometer, 10);
-	  sensors.setResolution(dogHouseThermometer, 10);
+
 
 }
 
@@ -96,11 +93,5 @@ void loop()
 	  Serial.print("Inside temperature is: ");
 	  printTemperature(insideThermometer);
 	  Serial.print("\n\r");
-	  Serial.print("Outside temperature is: ");
-	  printTemperature(outsideThermometer);
-	  Serial.print("\n\r");
-	  Serial.print("Dog House temperature is: ");
-	  printTemperature(dogHouseThermometer);
-	  Serial.print("\n\r\n\r");
 
 }
