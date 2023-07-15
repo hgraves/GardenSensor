@@ -59,17 +59,27 @@
 		<link>
 			<name>libraries/DallasTemperature</name>
 			<type>2</type>
-			<location>C:/Users/hgraves/Documents/Arduino/libraries/DallasTemperature</location>
+			<location>C:/Users/hgrav/Documents/Arduino/libraries/DallasTemperature</location>
 		</link>
 		<link>
 			<name>libraries/OneWire</name>
 			<type>2</type>
-			<location>C:/Users/hgraves/Documents/Arduino/libraries/OneWire</location>
+			<location>C:/Users/hgrav/Documents/Arduino/libraries/OneWire</location>
 		</link>
 		<link>
 			<name>libraries/RF24</name>
 			<type>2</type>
-			<location>C:/Users/hgraves/Documents/Arduino/libraries/RF24</location>
+			<location>C:/Users/hgrav/Documents/Arduino/libraries/RF24</location>
+		</link>
+		<link>
+			<name>libraries/RF24Mesh</name>
+			<type>2</type>
+			<location>C:/Users/hgrav/Documents/Arduino/libraries/RF24Mesh</location>
+		</link>
+		<link>
+			<name>libraries/RF24Network</name>
+			<type>2</type>
+			<location>C:/Users/hgrav/Documents/Arduino/libraries/RF24Network</location>
 		</link>
 		<link>
 			<name>libraries/SPI</name>
