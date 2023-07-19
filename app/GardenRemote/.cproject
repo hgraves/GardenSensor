@@ -31,6 +31,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SPI/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Mesh}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Network}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SD/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RTClib/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/Wire/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.1192416046" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -48,6 +51,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SPI/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Mesh}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Network}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SD/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RTClib/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/Wire/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.513193554" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -65,6 +71,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SPI/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Mesh}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RF24Network}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/SD/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/RTClib/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/GardenRemote/libraries/Wire/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1447360992" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>

@@ -1,29 +1,36 @@
-#include "Arduino.h"
+/* Data Logger */
 
 #include "DHT.h"
+#include <SPI.h>
+#include <SD.h>
 #include <OneWire.h>
+#include "RTClib.h"
 #include <DallasTemperature.h>
 #include "RF24.h"
 #include "RF24Network.h"
 #include "RF24Mesh.h"
 #include <SPI.h>
 
-#define DHTPIN 2     // what pin we're connected to
+#define DHTPIN 2     
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+#define ONE_WIRE_BUS 7
+#define LED_PIN 8
 
-// Uncomment whatever type you're using!
-#define DHTTYPE DHT11   // DHT 11
-//#define DHTTYPE DHT22   // DHT 22  (AM2302)
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+RTC_PCF8523 rtc;
 
-// Connect pin 1 (on the left) of the sensor to +5V
-// Connect pin 2 of the sensor to whatever your DHTPIN is
-// Connect pin 4 (on the right) of the sensor to GROUND
-// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
+const int chipSelect = 10;
+int photoSensorPin = A0;
+int sensorValue = 0;
+
+int logInterval = 10;  // 10 seconds 
+
+File dataFile;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+String dataString = "";
 
 DHT dht(DHTPIN, DHTTYPE);
-
-// Data wire is plugged into pin 3 on the Arduino
-#define ONE_WIRE_BUS 3
 
 // Setup a oneWire instance to communicate with any OneWire devices
 OneWire oneWire(ONE_WIRE_BUS);
@@ -31,105 +38,115 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
 
-int LightPin = A0;
+void setup() {
 
-// Assign the addresses of your 1-Wire temp sensors.
-// See the tutorial on how to obtain these addresses:
-// http://www.hacktronics.com/Tutorials/arduino-1-wire-address-finder.html
+  while (!Serial) {
+    delay(1);  // for Leonardo/Micro/Zero
+  }
 
-DeviceAddress insideThermometer = { 0x28, 0x94, 0xE2, 0xDF, 0x02, 0x00, 0x00, 0xFE };
-// DeviceAddress outsideThermometer = { 0x28, 0x6B, 0xDF, 0xDF, 0x02, 0x00, 0x00, 0xC0 };
-// DeviceAddress dogHouseThermometer = { 0x28, 0x59, 0xBE, 0xDF, 0x02, 0x00, 0x00, 0x9F };
+  pinMode(LED_PIN, OUTPUT);
 
-struct dataFrameStruct {
-	float 		soilTempC;
-	float 		ambiantHumidity;
-	float 		ambiantTempC;
-	uint32_t   	luminocity;
+  Serial.begin(57600);
+  
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1) delay(10);
+  }
 
-};
+   if (! rtc.initialized() || rtc.lostPower()) {
+    Serial.println("RTC is NOT initialized, let's set the time!");
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+   }
+  
+  rtc.start();
 
-//The setup function is called once at startup of the sketch
-void setup()
-{
-	  Serial.begin(115200);
-	  Serial.println("DHTxx test!");
+  dht.begin();
 
-	  dht.begin();
+  Serial.print("Initializing SD card...");
 
+  // see if the card is present and can be initialized:
+  if (!SD.begin(chipSelect)) {
+    Serial.println("Card failed, or not present");
+    // don't do anything more:
+    return;
+  }
+  Serial.println("card initialized.");
 
-	  // set the resolution to 10 bit (good enough?)
-	  sensors.setResolution(insideThermometer, 10);
+  dataFile = SD.open("datalog.txt", FILE_WRITE);
 
+  dataString = "Date, Time, Soil Temperature, Humidity, Temperature, PhotoSensor";
+  
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+    // print to the serial port too:
+    Serial.println(dataString);
+  }    // if the file isn't open, pop up an error:
+  else {
+    Serial.println("error opening datalog.txt");
+  }
 }
 
-void printTemperature(DeviceAddress deviceAddress)
-{
-	float tempC = sensors.getTempC(deviceAddress);
+void loop() {
 
-	if (tempC == -127.00) {
-		Serial.print("Error getting temperature");
-	} else {
-		Serial.print("C: ");
-		Serial.print(tempC);
-		Serial.print(" F: ");
-		Serial.print(DallasTemperature::toFahrenheit(tempC));
-	}
+  dataString = "";
+  
+  DateTime now = rtc.now();
+  
+  float humidity = dht.readHumidity();
+  float temperature = (dht.readTemperature() * 9/5) + 32;
 
+  sensorValue = analogRead(photoSensorPin);
 
-}
-
-//Serial.print("Humidity: ");
-//Serial.print(h);
-//Serial.print(" %\t");
-//Serial.print("Temperature: ");
-//Serial.print(t);
-//Serial.println(" *F");
-
-//Serial.print("C: ");
-//Serial.print(tempC);
-//Serial.print(" F: ");
-//Serial.print(DallasTemperature::toFahrenheit(tempC));
-
-// The loop function is called in an endless loop
-void loop()
-{
-	struct dataFrameStruct dataFrame;
-
-	// Check for command message
+  sensors.requestTemperatures();
+  float soilTemp = (sensors.getTempCByIndex(0) * 9/5) + 32;
 
 
-	// Read humidity and temperature
-	// Reading temperature or humidity takes about 250 milliseconds!
-	// Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-	float h = dht.readHumidity();
-	float t = (dht.readTemperature() * 9 / 5) + 32;
+//  Serial.print(now.year());
+//  Serial.print('/');
+//  Serial.print(now.month());
+//  Serial.print('/');
+//  Serial.print(now.day());
+//  Serial.print(" ");
+//  Serial.print(now.hour());
+//  Serial.print(':');
+//  Serial.print(now.minute());
+//  Serial.print(':');
+//  Serial.print(now.second());
+//  Serial.println();
+//
+//  Serial.print("Humidity - ");
+//  Serial.println(humidity);
+//  Serial.print("Temperature - ");
+//  Serial.println(temperature);
+//  Serial.print("Photo Sensor - ");
+//  Serial.println(sensorValue);
+//  Serial.println();
 
-	// check if returns are valid, if they are NaN (not a number) then something went wrong!
-	if (isnan(t) || isnan(h)) {
-		Serial.println("Failed to read from DHT");
-	} else {
-		dataFrame.ambiantHumidity = h;
-		dataFrame.ambiantTempC = t;
-	}
+  dataString = dataString + now.month() + "/" + now.day() + "/" + now.year() + "," + now.hour() + ":" + now.minute() + ":" + now.second() + ",";
+  dataString = dataString + soilTemp + ",";
+  dataString = dataString + humidity + ",";
+  dataString = dataString + temperature + ",";
+  dataString = dataString + sensorValue;
 
+  digitalWrite(LED_PIN, HIGH);
 
-	// Read soil temperature
-	sensors.requestTemperatures();
+  dataFile = SD.open("datalog.txt", FILE_WRITE);
 
-	float tempC = sensors.getTempC(insideThermometer);
+  // if the file is available, write to it:
+  if (dataFile) {
+    dataFile.println(dataString);
+    dataFile.close();
+    // print to the serial port too:
+    Serial.println(dataString);
+  }    // if the file isn't open, pop up an error:
+  else {
+    Serial.println("error opening datalog.txt");
+  }
+  
+  digitalWrite(LED_PIN, LOW);
 
-	if (tempC == -127.00) {
-		Serial.print("Error getting temperature");
-	} else {
-		dataFrame.soilTempC = tempC;
-	}
-
-	// Read luminosity
-	uint32_t currentLuminosity;
-	currentLuminosity = analogRead(LightPin);
-	dataFrame.luminocity = currentLuminosity;
-
-	// Send status message
-
+  delay(logInterval * 1000);
+  
 }
